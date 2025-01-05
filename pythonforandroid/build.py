@@ -9,11 +9,12 @@ from os.path import (
 import re
 import shutil
 import subprocess
+from typing import Optional
 
 import sh
 
 from pythonforandroid.androidndk import AndroidNDK
-from pythonforandroid.archs import ArchARM, ArchARMv7_a, ArchAarch_64, Archx86, Archx86_64
+from pythonforandroid.archs import ArchARM, ArchARMv7_a, ArchAarch_64, Archx86, Archx86_64, Arch
 from pythonforandroid.logger import (info, warning, info_notify, info_main, shprint)
 from pythonforandroid.pythonpackage import get_package_name
 from pythonforandroid.recipe import CythonRecipe, Recipe
@@ -135,7 +136,7 @@ class Context:
         ensure_dir(directory)
         return directory
 
-    def get_python_install_dir(self, arch):
+    def get_python_install_dir(self, arch: str):
         return join(self.python_installs_dir, self.bootstrap.distribution.name, arch)
 
     def setup_dirs(self, storage_dir):
@@ -417,7 +418,7 @@ class Context:
     def prepare_dist(self):
         self.bootstrap.prepare_dist_dir()
 
-    def get_site_packages_dir(self, arch):
+    def get_site_packages_dir(self, arch: Arch):
         '''Returns the location of site-packages in the python-install build
         dir.
         '''
@@ -463,7 +464,7 @@ class Context:
         return not self.has_package(name, arch)
 
 
-def build_recipes(build_order, python_modules, ctx, project_dir,
+def build_recipes(build_order, python_modules, ctx: Context, project_dir,
                   ignore_project_setup_py=False
                  ):
     # Put recipes in correct build order
@@ -538,7 +539,7 @@ def project_has_setup_py(project_dir):
             ))
 
 
-def run_setuppy_install(ctx, project_dir, env=None, arch=None):
+def run_setuppy_install(ctx, project_dir, env=None, arch:Optional[Arch]=None):
     env = env or {}
 
     with current_directory(project_dir):
@@ -764,7 +765,7 @@ def run_pymodules_install(ctx, arch, modules, project_dir=None,
         if project_dir is not None and (
                 project_has_setup_py(project_dir) and not ignore_setup_py
                 ):
-            run_setuppy_install(ctx, project_dir, env, arch.arch)
+            run_setuppy_install(ctx, project_dir, env, arch)
         elif not ignore_setup_py:
             info("No setup.py found in project directory: " + str(project_dir))
 
