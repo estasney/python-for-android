@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: add typing
+message: Add your rule message here....
+severity: error # error, warning, info, hint
+language: Python
+rule:
+  pattern: import sh
+
+fix: |
+  from typing import TYPE_CHECKING
+  import sh
+  from pythonforandroid.archs import Arch
+
+# utils: Extract repeated rule as local utility here.
+# note: Add detailed explanation for the rule.

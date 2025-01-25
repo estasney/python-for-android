@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ast-grep/ast-grep/main/schemas/rule.json
+
+id: typed_arch
+message: Add your rule message here....
+severity: error # error, warning, info, hint
+language: Python
+rule:
+  kind: identifier
+  pattern: $ARCH
+  regex: arch
+  inside:
+    kind: parameters
+    inside:
+      kind: function_definition
+      inside:
+        kind: class_definition
+        stopBy: end
+
+fix: "$ARCH: 'Arch'"
