@@ -1,8 +1,16 @@
+import glob
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import info, shprint
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe
 from pythonforandroid.toolchain import current_directory
-from pythonforandroid.logger import shprint, info
-import glob
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class M2CryptoRecipe(CompiledComponentsPythonRecipe):
@@ -12,7 +20,7 @@ class M2CryptoRecipe(CompiledComponentsPythonRecipe):
     site_packages_name = 'M2Crypto'
     call_hostpython_via_targetpython = False
 
-    def build_compiled_components(self, arch):
+    def build_compiled_components(self, arch: 'Arch'):
         info('Building compiled components in {}'.format(self.name))
 
         env = self.get_recipe_env(arch)
@@ -31,7 +39,7 @@ class M2CryptoRecipe(CompiledComponentsPythonRecipe):
             shprint(sh.find, build_dir, '-name', '"*.o"', '-exec',
                     env['STRIP'], '{}', ';', _env=env)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['OPENSSL_BUILD_PATH'] = self.get_recipe('openssl', self.ctx).get_build_dir(arch.arch)
         return env

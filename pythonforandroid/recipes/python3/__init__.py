@@ -1,21 +1,26 @@
 import glob
-import sh
+import shutil
 import subprocess
-
 from os import environ, utime
 from os.path import dirname, exists, join
 from pathlib import Path
-import shutil
+from typing import TYPE_CHECKING
 
-from pythonforandroid.logger import info, warning, shprint
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import info, shprint, warning
 from pythonforandroid.patching import version_starts_with
 from pythonforandroid.recipe import Recipe, TargetPythonRecipe
 from pythonforandroid.util import (
+    BuildInterruptingException,
     current_directory,
     ensure_dir,
     walk_valid_filens,
-    BuildInterruptingException,
 )
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 NDK_API_LOWER_THAN_SUPPORTED_MESSAGE = (
     'Target ndk-api is {ndk_api}, '
@@ -184,16 +189,16 @@ class Python3Recipe(TargetPythonRecipe):
             flags=flags
         )
 
-    def include_root(self, arch_name):
+    def include_root(self, arch_name: 'Arch'):
         return join(self.get_build_dir(arch_name), 'Include')
 
-    def link_root(self, arch_name):
+    def link_root(self, arch_name: 'Arch'):
         return join(self.get_build_dir(arch_name), 'android-build')
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         return not Path(self.link_root(arch.arch), self._libpython).is_file()
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
         self.ctx.python_recipe = self
 
@@ -227,7 +232,7 @@ class Python3Recipe(TargetPythonRecipe):
 
         return env
 
-    def set_libs_flags(self, env, arch):
+    def set_libs_flags(self, env, arch: 'Arch'):
         '''Takes care to properly link libraries with python depending on our
         requirements and the attribute :attr:`opt_depends`.
         '''
@@ -297,7 +302,7 @@ class Python3Recipe(TargetPythonRecipe):
 
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         if self.ctx.ndk_api < self.MIN_NDK_API:
             raise BuildInterruptingException(
                 NDK_API_LOWER_THAN_SUPPORTED_MESSAGE.format(
@@ -363,7 +368,7 @@ class Python3Recipe(TargetPythonRecipe):
         args += ['-OO', '-m', 'compileall', '-b', '-f', dir]
         subprocess.call(args)
 
-    def create_python_bundle(self, dirn, arch):
+    def create_python_bundle(self, dirn, arch: 'Arch'):
         """
         Create a packaged python bundle in the target directory, by
         copying all the modules and standard library to the right

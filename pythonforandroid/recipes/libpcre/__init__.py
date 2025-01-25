@@ -1,9 +1,16 @@
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.util import current_directory
-from pythonforandroid.logger import shprint
-import sh
 from multiprocessing import cpu_count
 from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class LibpcreRecipe(Recipe):
@@ -12,7 +19,7 @@ class LibpcreRecipe(Recipe):
 
     built_libraries = {'libpcre.so': '.libs'}
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
 
         with current_directory(self.get_build_dir(arch.arch)):
@@ -24,7 +31,7 @@ class LibpcreRecipe(Recipe):
                 _env=env)
             shprint(sh.make, '-j', str(cpu_count()), _env=env)
 
-    def get_lib_dir(self, arch):
+    def get_lib_dir(self, arch: 'Arch'):
         return join(self.get_build_dir(arch), '.libs')
 
 

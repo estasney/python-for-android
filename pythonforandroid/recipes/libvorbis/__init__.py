@@ -1,7 +1,15 @@
+from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import NDKRecipe
 from pythonforandroid.toolchain import current_directory, shprint
-from os.path import join
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class VorbisRecipe(NDKRecipe):
@@ -17,7 +25,7 @@ class VorbisRecipe(NDKRecipe):
         env['CFLAGS'] += ' -I{}'.format(join(ogg.get_build_dir(arch.arch), 'include'))
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         with current_directory(self.get_build_dir(arch.arch)):
             env = self.get_recipe_env(arch)
             flags = [

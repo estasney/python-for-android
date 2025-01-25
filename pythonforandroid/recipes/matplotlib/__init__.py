@@ -1,8 +1,8 @@
+import shutil
+from os.path import join
+
 from pythonforandroid.recipe import CppCompiledComponentsPythonRecipe
 from pythonforandroid.util import ensure_dir
-
-from os.path import join
-import shutil
 
 
 class MatplotlibRecipe(CppCompiledComponentsPythonRecipe):
@@ -14,7 +14,7 @@ class MatplotlibRecipe(CppCompiledComponentsPythonRecipe):
 
     python_depends = ['cycler', 'fonttools', 'packaging', 'pyparsing', 'python-dateutil']
 
-    def generate_libraries_pc_files(self, arch):
+    def generate_libraries_pc_files(self, arch: 'Arch'):
         """
         Create *.pc files for libraries that `matplotib` depends on.
 
@@ -55,7 +55,7 @@ class MatplotlibRecipe(CppCompiledComponentsPythonRecipe):
             with open(pc_dest_file, 'w') as pc_file:
                 pc_file.write(text_buffer)
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         shutil.copyfile(
             join(self.get_recipe_dir(), "setup.cfg.template"),
             join(self.get_build_dir(arch), "mplsetup.cfg"),

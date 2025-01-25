@@ -1,8 +1,15 @@
 
-from pythonforandroid.recipe import CythonRecipe
-from pythonforandroid.toolchain import shprint, current_directory, info
-import sh
 from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.recipe import CythonRecipe
+from pythonforandroid.toolchain import current_directory, info, shprint
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class AudiostreamRecipe(CythonRecipe):
@@ -14,7 +21,7 @@ class AudiostreamRecipe(CythonRecipe):
     name = 'audiostream'
     depends = ['python3', 'sdl2', 'pyjnius']
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         sdl_include = 'SDL2'
 
@@ -34,7 +41,7 @@ class AudiostreamRecipe(CythonRecipe):
         env['LIBLINK'] = 'NOTNONE'  # Hacky fix. Needed by audiostream setup.py
         return env
 
-    def postbuild_arch(self, arch):
+    def postbuild_arch(self, arch: 'Arch'):
         # TODO: This code was copied from pyjnius, but judging by the
         #       audiostream history, it looks like this step might have
         #       happened automatically in the past.

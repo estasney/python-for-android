@@ -23,7 +23,7 @@ class Pygame2Recipe(CompiledComponentsPythonRecipe):
     call_hostpython_via_targetpython = False  # Due to setuptools
     install_in_hostpython = False
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
         with current_directory(self.get_build_dir(arch.arch)):
             setup_template = open(join("buildconfig", "Setup.Android.SDL2.in")).read()
@@ -61,7 +61,7 @@ class Pygame2Recipe(CompiledComponentsPythonRecipe):
             )
             open("Setup", "w").write(setup_file)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['USE_SDL2'] = '1'
         env["PYGAME_CROSS_COMPILE"] = "TRUE"

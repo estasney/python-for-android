@@ -1,5 +1,5 @@
-from pythonforandroid.recipes.Pillow import PillowRecipe
 from pythonforandroid.logger import warning
+from pythonforandroid.recipes.Pillow import PillowRecipe
 
 
 class PilRecipe(PillowRecipe):
@@ -12,7 +12,7 @@ class PilRecipe(PillowRecipe):
 
     conflicts = ['pillow']
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         warning('PIL is no longer supported, building Pillow instead. '
                 'This should be a drop-in replacement.')
         warning('It is recommended to change "pil" to "pillow" in your requirements, '

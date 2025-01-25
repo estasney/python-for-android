@@ -1,3 +1,4 @@
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe
 
 
@@ -8,7 +9,7 @@ class Argon2Recipe(CompiledComponentsPythonRecipe):
     call_hostpython_via_targetpython = False
     build_cmd = 'build'
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['ARGON2_CFFI_USE_SSE2'] = '0'
         return env

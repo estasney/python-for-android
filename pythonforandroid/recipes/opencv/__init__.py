@@ -1,11 +1,16 @@
 from multiprocessing import cpu_count
 from os.path import join
+from typing import TYPE_CHECKING
 
 import sh
 
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import NDKRecipe
 from pythonforandroid.util import current_directory, ensure_dir
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class OpenCVRecipe(NDKRecipe):
@@ -36,16 +41,16 @@ class OpenCVRecipe(NDKRecipe):
         'libopencv_photo.so',
     ]
 
-    def get_lib_dir(self, arch):
+    def get_lib_dir(self, arch: 'Arch'):
         return join(self.get_build_dir(arch.arch), 'build', 'lib', arch.arch)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['ANDROID_NDK'] = self.ctx.ndk_dir
         env['ANDROID_SDK'] = self.ctx.sdk_dir
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         build_dir = join(self.get_build_dir(arch.arch), 'build')
         ensure_dir(build_dir)
 

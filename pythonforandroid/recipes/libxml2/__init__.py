@@ -1,8 +1,16 @@
+from os.path import exists
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.util import current_directory
-from pythonforandroid.logger import shprint
-from os.path import exists
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class Libxml2Recipe(Recipe):
@@ -12,7 +20,7 @@ class Libxml2Recipe(Recipe):
     patches = ['add-glob.c.patch']
     built_libraries = {'libxml2.a': '.libs'}
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
         with current_directory(self.get_build_dir(arch.arch)):
 
@@ -42,7 +50,7 @@ class Libxml2Recipe(Recipe):
             # we'll need the glob dependency which is a big headache
             shprint(sh.make, "libxml2.la", _env=env)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['CONFIG_SHELL'] = '/bin/bash'
         env['SHELL'] = '/bin/bash'

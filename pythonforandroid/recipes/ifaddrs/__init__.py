@@ -1,13 +1,18 @@
 """ ifaddrs for Android
 """
 from os.path import join
+from typing import TYPE_CHECKING
 
 import sh
 
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe
 from pythonforandroid.toolchain import current_directory
 from pythonforandroid.util import ensure_dir
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class IFAddrRecipe(CompiledComponentsPythonRecipe):
@@ -19,12 +24,12 @@ class IFAddrRecipe(CompiledComponentsPythonRecipe):
     site_packages_name = 'ifaddrs'
     generated_libraries = ['libifaddrs.so']
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         """Make the build and target directories"""
         path = self.get_build_dir(arch.arch)
         ensure_dir(path)
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         """simple shared compile"""
         env = self.get_recipe_env(arch, with_flags_in_cc=False)
         for path in (

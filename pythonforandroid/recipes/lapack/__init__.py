@@ -3,15 +3,27 @@ known to build with cmake version 3.23.2 and NDK r21e.
 See https://gitlab.kitware.com/cmake/cmake/-/issues/18739
 '''
 
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.logger import shprint
-from pythonforandroid.util import current_directory, ensure_dir, BuildInterruptingException
-from multiprocessing import cpu_count
-from os.path import join
-import sh
 import shutil
+from multiprocessing import cpu_count
 from os import environ
-from pythonforandroid.util import build_platform, rmdir
+from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import (
+    BuildInterruptingException,
+    build_platform,
+    current_directory,
+    ensure_dir,
+    rmdir,
+)
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 arch_to_sysroot = {'armeabi': 'arm', 'armeabi-v7a': 'arm', 'arm64-v8a': 'arm64'}
 
@@ -30,7 +42,7 @@ class LapackRecipe(Recipe):
     libdir = 'build/install/lib'
     built_libraries = {'libblas.so': libdir, 'liblapack.so': libdir, 'libcblas.so': libdir}
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
 
         ndk_dir = environ.get("LEGACY_NDK")
@@ -48,7 +60,7 @@ class LapackRecipe(Recipe):
             raise BuildInterruptingException(f"{FC} not found. See https://github.com/mzakharo/android-gfortran")
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         source_dir = self.get_build_dir(arch.arch)
         build_target = join(source_dir, 'build')
         install_target = join(build_target, 'install')

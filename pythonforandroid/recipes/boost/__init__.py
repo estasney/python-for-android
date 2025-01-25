@@ -1,10 +1,18 @@
-from pythonforandroid.util import current_directory
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.logger import shprint
-from os.path import join, exists
-from os import environ
 import shutil
+from os import environ
+from os.path import exists, join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 """
 This recipe bootstraps Boost from source to build Boost.Build
@@ -56,10 +64,10 @@ class BoostRecipe(Recipe):
             version_underscore=self.version.replace('.', '_'),
         )
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         return not exists(join(self.get_build_dir(arch.arch), 'b2'))
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
         env = self.get_recipe_env(arch)
         with current_directory(self.get_build_dir(arch.arch)):
@@ -69,7 +77,7 @@ class BoostRecipe(Recipe):
                 join(env['BOOST_BUILD_PATH'], 'user-config.jam'),
             )
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         super().build_arch(arch)
         env = self.get_recipe_env(arch)
         env['PYTHON_HOST'] = self.ctx.hostpython
@@ -79,7 +87,7 @@ class BoostRecipe(Recipe):
                 bash = sh.Command('bash')
                 shprint(bash, 'bootstrap.sh')  # Do not pass env
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         # We don't use the normal env because we
         # are building with a standalone toolchain
         env = environ.copy()

@@ -1,6 +1,14 @@
-from pythonforandroid.toolchain import Recipe, current_directory, shprint
 from os.path import exists, join, realpath
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.toolchain import Recipe, current_directory, shprint
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class FFMpegRecipe(Recipe):
@@ -11,19 +19,19 @@ class FFMpegRecipe(Recipe):
     opts_depends = ['openssl', 'ffpyplayer_codecs']
     patches = ['patches/configure.patch']
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         build_dir = self.get_build_dir(arch.arch)
         return not exists(join(build_dir, 'lib', 'libavcodec.so'))
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         self.apply_patches(arch)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['NDK'] = self.ctx.ndk_dir
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         with current_directory(self.get_build_dir(arch.arch)):
             env = arch.get_env()
 

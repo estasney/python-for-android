@@ -1,8 +1,15 @@
+from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.util import current_directory
-import sh
-from os.path import join
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class LibmysqlclientRecipe(Recipe):
@@ -19,10 +26,10 @@ class LibmysqlclientRecipe(Recipe):
 
     patches = ['disable-soversion.patch']
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         return not self.has_libs(arch, 'libmysql.so')
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
         with current_directory(join(self.get_build_dir(arch.arch), 'libmysqlclient')):
             shprint(sh.cp, '-t', '.', join(self.get_recipe_dir(), 'p4a.cmake'))

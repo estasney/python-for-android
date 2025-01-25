@@ -8,7 +8,7 @@ class CryptographyRecipe(CompiledComponentsPythonRecipe):
     depends = ['openssl', 'six', 'setuptools', 'cffi']
     call_hostpython_via_targetpython = False
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
 
         openssl_recipe = Recipe.get_recipe('openssl', self.ctx)

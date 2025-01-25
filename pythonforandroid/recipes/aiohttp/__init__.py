@@ -1,5 +1,7 @@
 """Build AIOHTTP"""
 from typing import List
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import CppCompiledComponentsPythonRecipe
 
 
@@ -11,7 +13,7 @@ class AIOHTTPRecipe(CppCompiledComponentsPythonRecipe):  # type: ignore # pylint
     call_hostpython_via_targetpython = False
     install_in_hostpython = True
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['LDFLAGS'] += ' -lc++_shared'
         return env

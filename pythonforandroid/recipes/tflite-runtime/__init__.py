@@ -1,8 +1,21 @@
-from pythonforandroid.recipe import PythonRecipe, current_directory, \
-    shprint, info_main, warning
-from pythonforandroid.logger import error
 from os.path import join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import error
+from pythonforandroid.recipe import (
+    PythonRecipe,
+    current_directory,
+    info_main,
+    shprint,
+    warning,
+)
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class TFLiteRuntimeRecipe(PythonRecipe):
@@ -30,7 +43,7 @@ class TFLiteRuntimeRecipe(PythonRecipe):
     site_packages_name = 'tflite-runtime'
     call_hostpython_via_targetpython = False
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         name = self.folder_name.replace('-', '_')
 
         if self.ctx.has_package(name, arch):
@@ -39,7 +52,7 @@ class TFLiteRuntimeRecipe(PythonRecipe):
         info_main('{} apparently isn\'t already in site-packages'.format(name))
         return True
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         if arch.arch == 'x86_64':
             warning("******** tflite-runtime x86_64 will not be built *******")
             warning("Expect one of these app run time error messages:")

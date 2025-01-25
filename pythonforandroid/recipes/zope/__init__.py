@@ -1,6 +1,7 @@
 
-from pythonforandroid.recipe import PythonRecipe
 from os.path import join
+
+from pythonforandroid.recipe import PythonRecipe
 
 
 class ZopeRecipe(PythonRecipe):
@@ -10,7 +11,7 @@ class ZopeRecipe(PythonRecipe):
 
     depends = []
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
 
         # These are in the old zope recipe but seem like they shouldn't actually be necessary
@@ -19,7 +20,7 @@ class ZopeRecipe(PythonRecipe):
         env['LDSHARED'] = join(self.ctx.root_dir, 'tools', 'liblink')
         return env
 
-    def postbuild_arch(self, arch):
+    def postbuild_arch(self, arch: 'Arch'):
         super().postbuild_arch(arch)
 
         # Should do some deleting here

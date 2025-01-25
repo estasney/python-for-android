@@ -1,7 +1,15 @@
+from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import CythonRecipe
 from pythonforandroid.toolchain import current_directory, shprint
-from os.path import join
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class XedDSARecipe(CythonRecipe):
@@ -16,7 +24,7 @@ class XedDSARecipe(CythonRecipe):
     patches = ['remove_dependencies.patch']
     call_hostpython_via_targetpython = False
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         with current_directory(join(self.get_build_dir(arch.arch))):
             env = self.get_recipe_env(arch)
             hostpython = sh.Command(self.ctx.hostpython)

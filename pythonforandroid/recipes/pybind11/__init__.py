@@ -1,5 +1,6 @@
-from pythonforandroid.recipe import PythonRecipe
 from os.path import join
+
+from pythonforandroid.recipe import PythonRecipe
 
 
 class Pybind11Recipe(PythonRecipe):
@@ -10,7 +11,7 @@ class Pybind11Recipe(PythonRecipe):
     call_hostpython_via_targetpython = False
     install_in_hostpython = True
 
-    def get_include_dir(self, arch):
+    def get_include_dir(self, arch: 'Arch'):
         return join(self.get_build_dir(arch.arch), 'include')
 
 

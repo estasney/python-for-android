@@ -1,13 +1,19 @@
-from multiprocessing import cpu_count
 import os
-from os.path import exists, join
-from pythonforandroid.toolchain import info
-import sh
 import sys
+from multiprocessing import cpu_count
+from os.path import exists, join
+from typing import TYPE_CHECKING
 
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import info_notify, shprint
 from pythonforandroid.recipe import CppCompiledComponentsPythonRecipe
-from pythonforandroid.logger import shprint, info_notify
+from pythonforandroid.toolchain import info
 from pythonforandroid.util import current_directory, touch
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class ProtobufCppRecipe(CppCompiledComponentsPythonRecipe):
@@ -25,7 +31,7 @@ class ProtobufCppRecipe(CppCompiledComponentsPythonRecipe):
     built_libraries = {'libprotobuf.so': 'src/.libs'}
     protoc_dir = None
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
 
         patch_mark = join(self.get_build_dir(arch.arch), '.protobuf-patched')
@@ -69,7 +75,7 @@ class ProtobufCppRecipe(CppCompiledComponentsPythonRecipe):
         with current_directory(self.protoc_dir):
             shprint(sh.unzip, join(self.protoc_dir, filename))
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
 
         # Build libproto.so
@@ -96,7 +102,7 @@ class ProtobufCppRecipe(CppCompiledComponentsPythonRecipe):
 
         self.install_python_package(arch)
 
-    def build_compiled_components(self, arch):
+    def build_compiled_components(self, arch: 'Arch'):
         # Build python bindings and _message.so
         env = self.get_recipe_env(arch)
         with current_directory(join(self.get_build_dir(arch.arch), 'python')):
@@ -106,7 +112,7 @@ class ProtobufCppRecipe(CppCompiledComponentsPythonRecipe):
                     'build_ext',
                     _env=env, *self.setup_extra_args)
 
-    def install_python_package(self, arch):
+    def install_python_package(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
 
         info('Installing {} into site-packages'.format(self.name))
@@ -129,7 +135,7 @@ class ProtobufCppRecipe(CppCompiledComponentsPythonRecipe):
             'a',
         ).close()
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         if self.protoc_dir is not None:
             # we need protoc with binary for host platform

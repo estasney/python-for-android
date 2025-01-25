@@ -1,8 +1,16 @@
+from multiprocessing import cpu_count
+from os.path import join, realpath
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.toolchain import current_directory, shprint
-from os.path import join, realpath
-from multiprocessing import cpu_count
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 TARGETS = {
@@ -27,7 +35,7 @@ class VPXRecipe(Recipe):
         env['CXXFLAGS'] += f' -I{self.ctx.ndk.libcxx_include_dir}'
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         with current_directory(self.get_build_dir(arch.arch)):
             env = self.get_recipe_env(arch)
             flags = [

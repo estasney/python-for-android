@@ -1,8 +1,16 @@
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.logger import shprint
-from pythonforandroid.util import current_directory
 from os.path import join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class JpegRecipe(Recipe):
@@ -18,7 +26,7 @@ class JpegRecipe(Recipe):
     # we will require this below patch to build the shared library
     # patches = ['remove-version.patch']
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         build_dir = self.get_build_dir(arch.arch)
 
         # TODO: Fix simd/neon

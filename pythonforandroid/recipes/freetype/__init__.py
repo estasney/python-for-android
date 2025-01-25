@@ -1,9 +1,17 @@
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.logger import shprint, info
-from pythonforandroid.util import current_directory
-from os.path import join, exists
 from multiprocessing import cpu_count
+from os.path import exists, join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import info, shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class FreetypeRecipe(Recipe):
@@ -60,7 +68,7 @@ class FreetypeRecipe(Recipe):
 
         return env
 
-    def build_arch(self, arch, with_harfbuzz=False):
+    def build_arch(self, arch: 'Arch', with_harfbuzz=False):
         env = self.get_recipe_env(arch, with_harfbuzz=with_harfbuzz)
 
         harfbuzz_in_recipes = 'harfbuzz' in self.ctx.recipe_build_order
@@ -120,7 +128,7 @@ class FreetypeRecipe(Recipe):
                 shprint(sh.make, 'install', _env=env)
                 shprint(sh.make, 'distclean', _env=env)
 
-    def install_libraries(self, arch):
+    def install_libraries(self, arch: 'Arch'):
         # This library it's special because the first time we built it may not
         # generate the expected library, because it can depend on harfbuzz, so
         # we will make sure to only install it when the library exists

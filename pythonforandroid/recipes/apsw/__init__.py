@@ -1,6 +1,14 @@
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import PythonRecipe
 from pythonforandroid.toolchain import current_directory, shprint
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class ApswRecipe(PythonRecipe):
@@ -10,7 +18,7 @@ class ApswRecipe(PythonRecipe):
     call_hostpython_via_targetpython = False
     site_packages_name = 'apsw'
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
         with current_directory(self.get_build_dir(arch.arch)):
             # Build python bindings
@@ -22,7 +30,7 @@ class ApswRecipe(PythonRecipe):
         # Install python bindings
         super().build_arch(arch)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         sqlite_recipe = self.get_recipe('sqlite3', self.ctx)
         env['CFLAGS'] += ' -I' + sqlite_recipe.get_build_dir(arch.arch)

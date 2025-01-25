@@ -1,4 +1,5 @@
 from os.path import join
+
 from pythonforandroid.recipe import CppCompiledComponentsPythonRecipe
 
 
@@ -9,7 +10,7 @@ class PyICURecipe(CppCompiledComponentsPythonRecipe):
     depends = ["icu"]
     patches = ['locale.patch']
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
 
         icu_include = join(

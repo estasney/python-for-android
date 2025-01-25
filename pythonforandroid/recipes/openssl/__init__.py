@@ -1,9 +1,16 @@
 from os.path import join
+from typing import TYPE_CHECKING
 
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.util import current_directory
-from pythonforandroid.logger import shprint
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class OpenSSLRecipe(Recipe):
@@ -63,19 +70,19 @@ class OpenSSLRecipe(Recipe):
             return None
         return self.url.format(url_version=self.url_version)
 
-    def get_build_dir(self, arch):
+    def get_build_dir(self, arch: 'Arch'):
         return join(
             self.get_build_container_dir(arch), self.name + self.version
         )
 
-    def include_flags(self, arch):
+    def include_flags(self, arch: 'Arch'):
         '''Returns a string with the include folders'''
         openssl_includes = join(self.get_build_dir(arch.arch), 'include')
         return (' -I' + openssl_includes +
                 ' -I' + join(openssl_includes, 'internal') +
                 ' -I' + join(openssl_includes, 'openssl'))
 
-    def link_dirs_flags(self, arch):
+    def link_dirs_flags(self, arch: 'Arch'):
         '''Returns a string with the appropriate `-L<lib directory>` to link
         with the openssl libs. This string is usually added to the environment
         variable `LDFLAGS`'''
@@ -87,7 +94,7 @@ class OpenSSLRecipe(Recipe):
         variable `LIBS`'''
         return ' -lcrypto{version} -lssl{version}'.format(version=self.version)
 
-    def link_flags(self, arch):
+    def link_flags(self, arch: 'Arch'):
         '''Returns a string with the flags to link with the openssl libraries
         in the format: `-L<lib directory> -l<lib>`'''
         return self.link_dirs_flags(arch) + self.link_libs_flags()
@@ -100,7 +107,7 @@ class OpenSSLRecipe(Recipe):
         env['ANDROID_NDK_HOME'] = self.ctx.ndk_dir
         return env
 
-    def select_build_arch(self, arch):
+    def select_build_arch(self, arch: 'Arch'):
         aname = arch.arch
         if 'arm64' in aname:
             return 'android-arm64'
@@ -114,7 +121,7 @@ class OpenSSLRecipe(Recipe):
             return 'android-x86'
         return 'linux-armv4'
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
         with current_directory(self.get_build_dir(arch.arch)):
             # sh fails with code 255 trying to execute ./Configure

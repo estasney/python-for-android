@@ -1,11 +1,16 @@
 from multiprocessing import cpu_count
 from os.path import join
+from typing import TYPE_CHECKING
 
 import sh
 
-from pythonforandroid.util import current_directory, ensure_dir
-from pythonforandroid.toolchain import shprint
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import Recipe
+from pythonforandroid.toolchain import shprint
+from pythonforandroid.util import current_directory, ensure_dir
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class LibwebpRecipe(Recipe):
@@ -19,7 +24,7 @@ class LibwebpRecipe(Recipe):
         'libwebpmux.so': 'installation/lib',
     }
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         source_dir = self.get_build_dir(arch.arch)
         build_dir = join(source_dir, 'build')
         install_dir = join(source_dir, 'installation')

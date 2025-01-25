@@ -1,6 +1,14 @@
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import PythonRecipe
 from pythonforandroid.toolchain import current_directory, shprint
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class Psycopg2Recipe(PythonRecipe):
@@ -16,7 +24,7 @@ class Psycopg2Recipe(PythonRecipe):
     site_packages_name = 'psycopg2'
     call_hostpython_via_targetpython = False
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         libdir = self.ctx.get_libs_dir(arch.arch)
         with current_directory(self.get_build_dir(arch.arch)):
             # pg_config_helper will return the system installed libpq, but we
@@ -25,13 +33,13 @@ class Psycopg2Recipe(PythonRecipe):
                     "s|pg_config_helper.query(.libdir.)|'{}'|".format(libdir),
                     'setup.py')
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['LDFLAGS'] = "{} -L{}".format(env['LDFLAGS'], self.ctx.get_libs_dir(arch.arch))
         env['EXTRA_CFLAGS'] = "--host linux-armv"
         return env
 
-    def install_python_package(self, arch, name=None, env=None, is_dir=True):
+    def install_python_package(self, arch: 'Arch', name=None, env=None, is_dir=True):
         '''Automate the installation of a Python package (or a cython
         package where the cython components are pre-built).'''
         if env is None:

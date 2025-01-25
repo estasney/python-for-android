@@ -8,7 +8,7 @@ class LibSDL2Mixer(BootstrapNDKRecipe):
     url = 'https://github.com/libsdl-org/SDL_mixer/releases/download/release-{version}/SDL2_mixer-{version}.tar.gz'
     dir_name = 'SDL2_mixer'
 
-    def get_include_dirs(self, arch):
+    def get_include_dirs(self, arch: 'Arch'):
         return [
             os.path.join(self.ctx.bootstrap.build_dir, "jni", "SDL2_mixer", "include")
         ]

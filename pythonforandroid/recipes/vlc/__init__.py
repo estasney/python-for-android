@@ -1,8 +1,16 @@
-from pythonforandroid.toolchain import Recipe, current_directory
-from pythonforandroid.logger import info, debug, shprint, warning
-from os.path import join, isdir, isfile
 from os import environ
+from os.path import isdir, isfile, join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import debug, info, shprint, warning
+from pythonforandroid.toolchain import Recipe, current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class VlcRecipe(Recipe):
@@ -17,7 +25,7 @@ class VlcRecipe(Recipe):
     ENV_LIBVLC_AAR = 'LIBVLC_AAR'
     aars = {}  # for future use of multiple arch
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
         build_dir = self.get_build_dir(arch.arch)
         port_dir = join(build_dir, 'vlc-port-android')
@@ -49,7 +57,7 @@ class VlcRecipe(Recipe):
 #                shprint(sh.git, 'clone', self.vlc_git, vlc_dir,
 #                            _tail=20, _critical=True)
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         super().build_arch(arch)
         build_dir = self.get_build_dir(arch.arch)
         port_dir = join(build_dir, 'vlc-port-android', 'buildsystem')

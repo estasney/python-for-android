@@ -1,10 +1,17 @@
 from multiprocessing import cpu_count
-from os.path import join
 from os import environ
+from os.path import join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe, Recipe
 from pythonforandroid.util import build_platform, current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 def arch_to_toolchain(arch):
@@ -24,12 +31,12 @@ class ScipyRecipe(CompiledComponentsPythonRecipe):
     need_stl_shared = True
     patches = ["setup.py.patch"]
 
-    def build_compiled_components(self, arch):
+    def build_compiled_components(self, arch: 'Arch'):
         self.setup_extra_args = ['-j', str(cpu_count())]
         super().build_compiled_components(arch)
         self.setup_extra_args = []
 
-    def rebuild_compiled_components(self, arch, env):
+    def rebuild_compiled_components(self, arch: 'Arch', env):
         self.setup_extra_args = ['-j', str(cpu_count())]
         super().rebuild_compiled_components(arch, env)
         self.setup_extra_args = []
@@ -40,7 +47,7 @@ class ScipyRecipe(CompiledComponentsPythonRecipe):
             shprint(sh.git, 'fetch', '--unshallow')
             shprint(sh.git, 'checkout', self.git_commit)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         arch_env = arch.get_env()
 

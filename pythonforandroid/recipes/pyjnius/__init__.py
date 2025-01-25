@@ -1,8 +1,15 @@
-from pythonforandroid.recipe import CythonRecipe
-from pythonforandroid.toolchain import shprint, current_directory, info
-from pythonforandroid.patching import will_build
-import sh
 from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.patching import will_build
+from pythonforandroid.recipe import CythonRecipe
+from pythonforandroid.toolchain import current_directory, info, shprint
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class PyjniusRecipe(CythonRecipe):
@@ -14,13 +21,13 @@ class PyjniusRecipe(CythonRecipe):
 
     patches = [('genericndkbuild_jnienv_getter.patch', will_build('genericndkbuild'))]
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         # NDKPLATFORM is our switch for detecting Android platform, so can't be None
         env['NDKPLATFORM'] = "NOTNONE"
         return env
 
-    def postbuild_arch(self, arch):
+    def postbuild_arch(self, arch: 'Arch'):
         super().postbuild_arch(arch)
         info('Copying pyjnius java class to classes build dir')
         with current_directory(self.get_build_dir(arch.arch)):

@@ -1,11 +1,18 @@
-from pythonforandroid.recipe import CompiledComponentsPythonRecipe
-from pythonforandroid.logger import shprint, info
-from pythonforandroid.util import current_directory
+import glob
+import shutil
 from multiprocessing import cpu_count
 from os.path import join
-import glob
+from typing import TYPE_CHECKING
+
 import sh
-import shutil
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import info, shprint
+from pythonforandroid.recipe import CompiledComponentsPythonRecipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class NumpyRecipe(CompiledComponentsPythonRecipe):
@@ -36,7 +43,7 @@ class NumpyRecipe(CompiledComponentsPythonRecipe):
 
         return env
 
-    def _build_compiled_components(self, arch):
+    def _build_compiled_components(self, arch: 'Arch'):
         info('Building compiled components in {}'.format(self.name))
 
         env = self.get_recipe_env(arch)
@@ -48,7 +55,7 @@ class NumpyRecipe(CompiledComponentsPythonRecipe):
             shprint(sh.find, build_dir, '-name', '"*.o"', '-exec',
                     env['STRIP'], '{}', ';', _env=env)
 
-    def _rebuild_compiled_components(self, arch, env):
+    def _rebuild_compiled_components(self, arch: 'Arch', env):
         info('Rebuilding compiled components in {}'.format(self.name))
 
         hostpython = sh.Command(self.real_hostpython_location)
@@ -56,17 +63,17 @@ class NumpyRecipe(CompiledComponentsPythonRecipe):
         shprint(hostpython, 'setup.py', self.build_cmd, '-v', _env=env,
                 *self.setup_extra_args)
 
-    def build_compiled_components(self, arch):
+    def build_compiled_components(self, arch: 'Arch'):
         self.setup_extra_args = ['-j', str(cpu_count())]
         self._build_compiled_components(arch)
         self.setup_extra_args = []
 
-    def rebuild_compiled_components(self, arch, env):
+    def rebuild_compiled_components(self, arch: 'Arch', env):
         self.setup_extra_args = ['-j', str(cpu_count())]
         self._rebuild_compiled_components(arch, env)
         self.setup_extra_args = []
 
-    def get_hostrecipe_env(self, arch):
+    def get_hostrecipe_env(self, arch: 'Arch'):
         env = super().get_hostrecipe_env(arch)
         env['RANLIB'] = shutil.which('ranlib')
         return env

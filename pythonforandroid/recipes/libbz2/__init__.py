@@ -1,6 +1,7 @@
-import sh
-
 from multiprocessing import cpu_count
+from typing import TYPE_CHECKING
+
+import sh
 
 from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint

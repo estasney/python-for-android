@@ -1,8 +1,15 @@
 from os.path import join
+from typing import TYPE_CHECKING
 
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import BootstrapNDKRecipe
 from pythonforandroid.toolchain import current_directory, shprint
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class GenericNDKBuildRecipe(BootstrapNDKRecipe):
@@ -12,7 +19,7 @@ class GenericNDKBuildRecipe(BootstrapNDKRecipe):
     depends = ['python3']
     conflicts = ['sdl2']
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         return True
 
     def get_recipe_env(self, arch=None, with_flags_in_cc=True, with_python=True):
@@ -25,7 +32,7 @@ class GenericNDKBuildRecipe(BootstrapNDKRecipe):
         env['PREFERRED_ABI'] = arch.arch
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
 
         with current_directory(self.get_jni_dir()):

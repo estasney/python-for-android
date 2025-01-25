@@ -1,11 +1,18 @@
 # coding=utf-8
 
-from pythonforandroid.recipe import CythonRecipe, Recipe
-from os.path import join
-from pythonforandroid.util import current_directory
-import sh
-from pythonforandroid.logger import shprint
 import glob
+from os.path import join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import CythonRecipe, Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class PyZMQRecipe(CythonRecipe):
@@ -30,7 +37,7 @@ class PyZMQRecipe(CythonRecipe):
         # env["LDSHARED"] = env["CC"] + ' -shared'
         return env
 
-    def build_cython_components(self, arch):
+    def build_cython_components(self, arch: 'Arch'):
         libzmq_recipe = Recipe.get_recipe('libzmq', self.ctx)
         libzmq_prefix = join(libzmq_recipe.get_build_dir(arch.arch), "install")
         self.setup_extra_args = ["--zmq={}".format(libzmq_prefix)]

@@ -1,11 +1,18 @@
-import sh
 import os
 import platform
-from os.path import join, isdir, exists
 from multiprocessing import cpu_count
+from os.path import exists, isdir, join
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.toolchain import shprint
 from pythonforandroid.util import current_directory, ensure_dir
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class ICURecipe(Recipe):
@@ -51,7 +58,7 @@ class ICURecipe(Recipe):
                 return local_recipe_dir
         return join(self.ctx.root_dir, 'recipes', 'icu')
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch).copy()
         build_root = self.get_build_dir(arch.arch)
 
@@ -112,7 +119,7 @@ class ICURecipe(Recipe):
                 shprint(sh.make, "-j", str(cpu_count()), _env=env)
                 shprint(sh.make, "install", _env=env)
 
-    def install_libraries(self, arch):
+    def install_libraries(self, arch: 'Arch'):
         super().install_libraries(arch)
 
         src_include = join(

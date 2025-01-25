@@ -1,6 +1,7 @@
-from pythonforandroid.recipe import Recipe, CompiledComponentsPythonRecipe
-from os.path import exists, join
 from os import uname
+from os.path import exists, join
+
+from pythonforandroid.recipe import CompiledComponentsPythonRecipe, Recipe
 
 
 class LXMLRecipe(CompiledComponentsPythonRecipe):
@@ -11,7 +12,7 @@ class LXMLRecipe(CompiledComponentsPythonRecipe):
 
     call_hostpython_via_targetpython = False  # Due to setuptools
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         super().should_build(arch)
 
         py_ver = self.ctx.python_recipe.major_minor_version_string
@@ -28,7 +29,7 @@ class LXMLRecipe(CompiledComponentsPythonRecipe):
 
         return not all([exists(join(build_dir, lib)) for lib in py_libs])
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
 
         # libxslt flags

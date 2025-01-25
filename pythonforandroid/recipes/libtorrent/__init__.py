@@ -1,11 +1,16 @@
+import shutil
 from multiprocessing import cpu_count
 from os import listdir, walk
-from os.path import join, basename
-import shutil
+from os.path import basename, join
+from typing import TYPE_CHECKING
 
 import sh
 
-from pythonforandroid.toolchain import Recipe, shprint, current_directory
+from pythonforandroid.archs import Arch
+from pythonforandroid.toolchain import Recipe, current_directory, shprint
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 # This recipe builds libtorrent with Python bindings
 # It depends on Boost.Build and the source of several Boost libraries present
@@ -56,21 +61,21 @@ class LibtorrentRecipe(Recipe):
     generated_libraries = [
         'boost_system', 'boost_python{py_version}', 'torrent_rasterbar']
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         python_version = self.ctx.python_recipe.version[:3].replace('.', '')
         libs = ['lib' + lib_name.format(py_version=python_version) +
                 '.so' for lib_name in self.generated_libraries]
         return not (self.has_libs(arch, *libs) and
                     self.ctx.has_package('libtorrent', arch.arch))
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
         if 'openssl' in recipe.ctx.recipe_build_order:
             # Patch boost user-config.jam to use openssl
             self.get_recipe('boost', self.ctx).apply_patch(
                 join(self.get_recipe_dir(), 'user-config-openssl.patch'), arch.arch)
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         super().build_arch(arch)
         env = self.get_recipe_env(arch)
         env['PYTHON_HOST'] = self.ctx.hostpython
@@ -137,7 +142,7 @@ class LibtorrentRecipe(Recipe):
         shutil.copyfile(python_libtorrent,
                         join(self.ctx.get_site_packages_dir(arch), 'libtorrent.so'))
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         # Use environment from boost recipe, cause we use b2 tool from boost
         env = self.get_recipe('boost', self.ctx).get_recipe_env(arch)
         if 'openssl' in recipe.ctx.recipe_build_order:

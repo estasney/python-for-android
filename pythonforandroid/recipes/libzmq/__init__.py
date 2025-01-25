@@ -1,8 +1,16 @@
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.logger import shprint
-from pythonforandroid.util import current_directory
 from os.path import join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class LibZMQRecipe(Recipe):
@@ -12,7 +20,7 @@ class LibZMQRecipe(Recipe):
     built_libraries = {'libzmq.so': 'src/.libs'}
     need_stl_shared = True
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
         #
         # libsodium_recipe = Recipe.get_recipe('libsodium', self.ctx)

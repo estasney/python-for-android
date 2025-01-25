@@ -1,8 +1,9 @@
+from os.path import join
+
+from pythonforandroid import logger
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import CythonRecipe, IncludedFilesBehaviour
 from pythonforandroid.util import current_directory
-from pythonforandroid import logger
-
-from os.path import join
 
 
 class AndroidRecipe(IncludedFilesBehaviour, CythonRecipe):
@@ -16,12 +17,12 @@ class AndroidRecipe(IncludedFilesBehaviour, CythonRecipe):
 
     config_env = {}
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env.update(self.config_env)
         return env
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         super().prebuild_arch(arch)
         ctx_bootstrap = self.ctx.bootstrap.name
 

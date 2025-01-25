@@ -1,9 +1,17 @@
 import os
+from multiprocessing import cpu_count
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.util import current_directory
-from pythonforandroid.logger import shprint
-from multiprocessing import cpu_count
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class LibZBarRecipe(Recipe):
@@ -26,7 +34,7 @@ class LibZBarRecipe(Recipe):
         env['LIBS'] = env.get('LIBS', '') + ' -landroid -liconv'
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
         with current_directory(self.get_build_dir(arch.arch)):
             shprint(sh.Command('autoreconf'), '-vif', _env=env)

@@ -1,9 +1,15 @@
 from os import makedirs, remove
 from os.path import exists, join
+from typing import TYPE_CHECKING
+
 import sh
 
-from pythonforandroid.recipe import Recipe
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class LibRt(Recipe):
@@ -18,7 +24,7 @@ class LibRt(Recipe):
         libc, so we create a symbolic link which we will remove when our build
         finishes'''
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         libc_path = join(arch.ndk_lib_dir_versioned, 'libc')
         # Create a temporary folder to add to link path with a fake librt.so:
         fake_librt_temp_folder = join(

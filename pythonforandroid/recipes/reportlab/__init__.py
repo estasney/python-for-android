@@ -1,9 +1,15 @@
 import os
+from typing import TYPE_CHECKING
+
 import sh
 
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import info
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe
 from pythonforandroid.util import current_directory, ensure_dir, touch
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 class ReportLabRecipe(CompiledComponentsPythonRecipe):
@@ -12,7 +18,7 @@ class ReportLabRecipe(CompiledComponentsPythonRecipe):
     depends = ['freetype']
     call_hostpython_via_targetpython = False
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         if not self.is_patched(arch):
             super().prebuild_arch(arch)
             recipe_dir = self.get_build_dir(arch.arch)

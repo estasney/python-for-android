@@ -1,18 +1,23 @@
-import sh
 import os
-
 from multiprocessing import cpu_count
-from pathlib import Path
 from os.path import join
+from pathlib import Path
+from typing import TYPE_CHECKING
 
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.logger import shprint
+from pythonforandroid.prerequisites import OpenSSLPrerequisite
 from pythonforandroid.recipe import Recipe
 from pythonforandroid.util import (
     BuildInterruptingException,
     current_directory,
     ensure_dir,
 )
-from pythonforandroid.prerequisites import OpenSSLPrerequisite
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 HOSTPYTHON_VERSION_UNSET_MESSAGE = (
     'The hostpython recipe must have set version'
@@ -73,7 +78,7 @@ class HostPython3Recipe(Recipe):
             env["PKG_CONFIG_PATH"] = openssl_prereq.pkg_config_location
         return env
 
-    def should_build(self, arch):
+    def should_build(self, arch: 'Arch'):
         if Path(self.python_exe).exists():
             # no need to build, but we must set hostpython for our Context
             self.ctx.hostpython = self.python_exe
@@ -95,7 +100,7 @@ class HostPython3Recipe(Recipe):
     def get_path_to_python(self):
         return join(self.get_build_dir(), self.build_subdir)
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         env = self.get_recipe_env(arch)
 
         recipe_build_dir = self.get_build_dir(arch.arch)

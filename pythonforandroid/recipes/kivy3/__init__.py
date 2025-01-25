@@ -1,5 +1,6 @@
-from pythonforandroid.recipe import PythonRecipe
 import shutil
+
+from pythonforandroid.recipe import PythonRecipe
 
 
 class Kivy3Recipe(PythonRecipe):
@@ -12,7 +13,7 @@ class Kivy3Recipe(PythonRecipe):
     '''Due to setuptools.'''
     call_hostpython_via_targetpython = False
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
         super().build_arch(arch)
         suffix = '/kivy3/default.glsl'
         shutil.copyfile(self.get_build_dir(arch.arch) + suffix, self.ctx.get_python_install_dir(arch.arch) + suffix)

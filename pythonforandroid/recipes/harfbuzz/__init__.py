@@ -1,9 +1,17 @@
-from pythonforandroid.recipe import Recipe
-from pythonforandroid.util import current_directory
-from pythonforandroid.logger import shprint
 from multiprocessing import cpu_count
 from os.path import join
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.logger import shprint
+from pythonforandroid.recipe import Recipe
+from pythonforandroid.util import current_directory
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class HarfbuzzRecipe(Recipe):
@@ -42,7 +50,7 @@ class HarfbuzzRecipe(Recipe):
             )
         return env
 
-    def build_arch(self, arch):
+    def build_arch(self, arch: 'Arch'):
 
         env = self.get_recipe_env(arch)
 

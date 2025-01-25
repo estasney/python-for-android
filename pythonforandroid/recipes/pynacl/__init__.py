@@ -1,5 +1,6 @@
-from pythonforandroid.recipe import CompiledComponentsPythonRecipe
 import os
+
+from pythonforandroid.recipe import CompiledComponentsPythonRecipe
 
 
 class PyNaCLRecipe(CompiledComponentsPythonRecipe):
@@ -10,7 +11,7 @@ class PyNaCLRecipe(CompiledComponentsPythonRecipe):
     depends = ['hostpython3', 'six', 'setuptools', 'cffi', 'libsodium']
     call_hostpython_via_targetpython = False
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env['SODIUM_INSTALL'] = 'system'
 

@@ -1,10 +1,18 @@
+from typing import TYPE_CHECKING
+
+import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import CompiledComponentsPythonRecipe, Recipe
 from pythonforandroid.toolchain import (
     current_directory,
     info,
     shprint,
 )
-import sh
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class PyCryptoRecipe(CompiledComponentsPythonRecipe):
@@ -29,7 +37,7 @@ class PyCryptoRecipe(CompiledComponentsPythonRecipe):
         env['ac_cv_func_malloc_0_nonnull'] = 'yes'
         return env
 
-    def build_compiled_components(self, arch):
+    def build_compiled_components(self, arch: 'Arch'):
         info('Configuring compiled components in {}'.format(self.name))
 
         env = self.get_recipe_env(arch)

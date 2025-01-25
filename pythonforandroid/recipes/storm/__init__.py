@@ -1,5 +1,13 @@
-from pythonforandroid.recipe import PythonRecipe, current_directory, shprint
+from typing import TYPE_CHECKING
+
 import sh
+
+from pythonforandroid.archs import Arch
+from pythonforandroid.recipe import PythonRecipe, current_directory, shprint
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
+
 
 
 class StormRecipe(PythonRecipe):
@@ -9,7 +17,7 @@ class StormRecipe(PythonRecipe):
     site_packages_name = 'storm'
     call_hostpython_via_targetpython = False
 
-    def prebuild_arch(self, arch):
+    def prebuild_arch(self, arch: 'Arch'):
         with current_directory(self.get_build_dir(arch.arch)):
             # Cross compiling for 32 bits in 64 bit ubuntu before precise is
             # failing. See

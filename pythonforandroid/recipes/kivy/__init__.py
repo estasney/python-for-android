@@ -1,11 +1,17 @@
 import glob
-from os.path import basename, exists, join
 import sys
-import packaging.version
+from os.path import basename, exists, join
+from typing import TYPE_CHECKING
 
+import packaging.version
 import sh
+
+from pythonforandroid.archs import Arch
 from pythonforandroid.recipe import CythonRecipe
 from pythonforandroid.toolchain import current_directory, shprint
+
+if TYPE_CHECKING:
+    from pythonforandroid.archs import Arch
 
 
 def is_kivy_affected_by_deadlock_issue(recipe=None, arch=None):
@@ -58,7 +64,7 @@ class KivyRecipe(CythonRecipe):
             return
         super().cythonize_file(env, build_dir, filename)
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         # NDKPLATFORM is our switch for detecting Android platform, so can't be None
         env['NDKPLATFORM'] = "NOTNONE"

@@ -9,7 +9,7 @@ class PyLevelDBRecipe(CppCompiledComponentsPythonRecipe):
     patches = ['bindings-only.patch']
     site_packages_name = 'leveldb'
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
 
         snappy_recipe = self.get_recipe('snappy', self.ctx)

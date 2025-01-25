@@ -8,7 +8,7 @@ class PymunkRecipe(CompiledComponentsPythonRecipe):
     depends = ["cffi", "setuptools"]
     call_hostpython_via_targetpython = False
 
-    def get_recipe_env(self, arch):
+    def get_recipe_env(self, arch: 'Arch'):
         env = super().get_recipe_env(arch)
         env["LDFLAGS"] += " -llog"  # Used by Chipmunk cpMessage
         env["LDFLAGS"] += " -lm"  # For older versions of Android

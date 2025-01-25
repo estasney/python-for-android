@@ -9,7 +9,7 @@ class ScryptRecipe(CythonRecipe):
     call_hostpython_via_targetpython = False
     patches = ["remove_librt.patch"]
 
-    def get_recipe_env(self, arch, with_flags_in_cc=True):
+    def get_recipe_env(self, arch: 'Arch', with_flags_in_cc=True):
         """
         Adds openssl recipe to include and library path.
         """

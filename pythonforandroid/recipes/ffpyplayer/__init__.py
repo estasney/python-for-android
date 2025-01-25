@@ -1,6 +1,7 @@
+from os.path import join
+
 from pythonforandroid.recipe import CythonRecipe
 from pythonforandroid.toolchain import Recipe
-from os.path import join
 
 
 class FFPyPlayerRecipe(CythonRecipe):
@@ -9,7 +10,7 @@ class FFPyPlayerRecipe(CythonRecipe):
     depends = ['python3', 'sdl2', 'ffmpeg']
     opt_depends = ['openssl', 'ffpyplayer_codecs']
 
-    def get_recipe_env(self, arch, with_flags_in_cc=True):
+    def get_recipe_env(self, arch: 'Arch', with_flags_in_cc=True):
         env = super().get_recipe_env(arch)
 
         build_dir = Recipe.get_recipe('ffmpeg', self.ctx).get_build_dir(arch.arch)
