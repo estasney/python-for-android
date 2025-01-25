@@ -1,7 +1,7 @@
 import threading
 
 try:
-    from jnius import autoclass, PythonJavaClass, java_method
+    from jnius import PythonJavaClass, autoclass, java_method
 except ImportError:
     # To allow importing by build/manifest-creating code without
     # pyjnius being present:

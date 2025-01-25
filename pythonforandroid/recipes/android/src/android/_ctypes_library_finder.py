@@ -1,6 +1,6 @@
 
-import sys
 import os
+import sys
 
 
 def get_activity_lib_dir(activity_name):

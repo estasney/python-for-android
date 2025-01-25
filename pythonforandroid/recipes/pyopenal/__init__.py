@@ -1,5 +1,6 @@
-from pythonforandroid.recipe import PythonRecipe
 from os.path import join
+
+from pythonforandroid.recipe import PythonRecipe
 
 
 class PyOpenALRecipe(PythonRecipe):

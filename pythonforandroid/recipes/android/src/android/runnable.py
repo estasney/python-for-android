@@ -3,7 +3,8 @@ Runnable
 ========
 '''
 
-from jnius import PythonJavaClass, java_method, autoclass
+from jnius import PythonJavaClass, autoclass, java_method
+
 from android.config import ACTIVITY_CLASS_NAME
 
 # Reference to the activity

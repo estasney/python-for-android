@@ -1,5 +1,6 @@
-from pythonforandroid.recipe import CythonRecipe
 from os.path import join
+
+from pythonforandroid.recipe import CythonRecipe
 
 
 class ShapelyRecipe(CythonRecipe):

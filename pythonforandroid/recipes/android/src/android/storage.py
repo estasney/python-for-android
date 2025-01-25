@@ -1,8 +1,8 @@
-from jnius import autoclass, cast
 import os
 
-from android.config import ACTIVITY_CLASS_NAME, SERVICE_CLASS_NAME
+from jnius import autoclass, cast
 
+from android.config import ACTIVITY_CLASS_NAME, SERVICE_CLASS_NAME
 
 Environment = autoclass('android.os.Environment')
 File = autoclass('java.io.File')

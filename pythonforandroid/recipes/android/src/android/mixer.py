@@ -1,10 +1,11 @@
 # This module is, as much a possible, a clone of the pygame
 # mixer api.
 
-import android._android_sound as sound
-import time
-import threading
 import os
+import threading
+import time
+
+import android._android_sound as sound
 
 condition = threading.Condition()
 

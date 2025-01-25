@@ -1,4 +1,5 @@
 import re
+
 from pythonforandroid.logger import info
 from pythonforandroid.recipe import CythonRecipe
 

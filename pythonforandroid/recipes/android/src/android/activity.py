@@ -1,4 +1,5 @@
 from jnius import PythonJavaClass, autoclass, java_method
+
 from android.config import ACTIVITY_CLASS_NAME, ACTIVITY_CLASS_NAMESPACE
 
 _activity = autoclass(ACTIVITY_CLASS_NAME).mActivity

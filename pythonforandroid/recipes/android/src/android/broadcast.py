@@ -1,8 +1,14 @@
 # -------------------------------------------------------------------
 # Broadcast receiver bridge
 
-from jnius import autoclass, PythonJavaClass, java_method
-from android.config import JAVA_NAMESPACE, JNI_NAMESPACE, ACTIVITY_CLASS_NAME, SERVICE_CLASS_NAME
+from jnius import PythonJavaClass, autoclass, java_method
+
+from android.config import (
+    ACTIVITY_CLASS_NAME,
+    JAVA_NAMESPACE,
+    JNI_NAMESPACE,
+    SERVICE_CLASS_NAME,
+)
 
 
 class BroadcastReceiver(object):

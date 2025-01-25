@@ -1,5 +1,5 @@
-from distutils.core import setup, Extension
 import os
+from distutils.core import Extension, setup
 
 library_dirs = ['libs/' + os.environ['ARCH']]
 lib_dict = {
